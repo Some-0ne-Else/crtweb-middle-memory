@@ -1,0 +1,15 @@
+.timer__button {
+    margin-top: 100px;
+    width: 70px;
+    height: 50px;
+}
+
+.timer__output {
+    font-size: 18px;
+    text-align: center;
+    width: 70px;
+    height: 50px;
+    display: block;
+    margin-top:50px;
+    color: gray;
+}
