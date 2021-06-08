@@ -25,7 +25,7 @@ const Cards = ({ onFinish }) => {
 
   const generateTypes = () => {
     const typesArr = [];
-    while (typesArr.length < 36) {
+    while (typesArr.length < cardsAmount) {
       const currVal = pseudoRandomTypes(min, max);
       if (typesArr.filter((item) => item === currVal).length < 2) { typesArr.push(currVal); }
     }
