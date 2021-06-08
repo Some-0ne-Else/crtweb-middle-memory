@@ -1,0 +1,11 @@
+.record{
+    display:flex;
+    justify-content:space-between;
+    border-top: solid 1px;
+    border-left: solid 1px;
+    border-right: solid 1px;
+    padding: 5px;
+}
+.record:last-child{
+    border-bottom: solid 1px;
+}

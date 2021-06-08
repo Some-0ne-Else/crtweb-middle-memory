@@ -9,4 +9,5 @@
     width: 200px;
     height: 100px;
     transition: ease 0.5s;
+    cursor: pointer;
 }

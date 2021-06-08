@@ -13,7 +13,6 @@ const Card = ({
     setCardActive(true);
     onClick(id, type);
   };
-
   return (
     <div className="card">
       <button className={`card_button ${cardActive ? 'card_active' : ''}`} type="button" onClick={onCardClick}>{ type }</button>
