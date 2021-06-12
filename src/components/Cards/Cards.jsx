@@ -4,9 +4,8 @@ import './Cards.css';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Card from '../Card/Card';
-import {
-  cardsAmount, min, max, reactionTime,
-} from '../../utils/constants';
+import { reactionTime } from '../../utils/constants';
+import { generateCards, generateTypes } from '../../utils/utils';
 
 // eslint-disable-next-line no-unused-vars
 const Cards = ({ onFinish }) => {
@@ -15,33 +14,9 @@ const Cards = ({ onFinish }) => {
   const selectedCardTwo = React.useRef(null);
   const timeout = React.useRef();
 
-  // Generating data for game
-  const cardsArr = [];
-  const pseudoRandomTypes = (minVal, maxVal) => {
-    const minimum = Math.ceil(minVal);
-    const maximum = Math.floor(maxVal);
-    return Math.floor(Math.random() * (maximum - minimum)) + minimum;
-  };
-
-  const generateTypes = () => {
-    const typesArr = [];
-    while (typesArr.length < cardsAmount) {
-      const currVal = pseudoRandomTypes(min, max);
-      if (typesArr.filter((item) => item === currVal).length < 2) { typesArr.push(currVal); }
-    }
-    return typesArr;
-  };
-  const types = generateTypes();
-
   React.useEffect(() => {
-    const generateCards = () => {
-      for (let i = 0; i < cardsAmount; i += 1) {
-        cardsArr.push({ id: i, type: types[i], active: false });
-      }
-    };
-    generateCards();
     // Filling initiate cards
-    setCards(cardsArr);
+    setCards(generateCards(generateTypes()));
   }, []);
 
   React.useEffect(() => {

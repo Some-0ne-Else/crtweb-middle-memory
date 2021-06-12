@@ -1,0 +1,9 @@
+.form{
+    display:flex;
+    width: 500px;
+    height: 50px;
+    align-items: center;
+}
+.form__caption{
+    padding: 10px;
+}
