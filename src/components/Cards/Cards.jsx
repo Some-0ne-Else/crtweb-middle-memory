@@ -21,11 +21,12 @@ const Cards = ({ onFinish }) => {
   const timeout = React.useRef();
 
   React.useEffect(() => {
-    if (!cards.length) { onFinish(); }
+    if (true) { console.log('here'); onFinish(); }
+    // if (!cards.length) { onFinish(); }
   }, [cards]);
 
   React.useEffect(() => {
-    setTimeout(() => onFinish(), 15000); // for test
+    // setTimeout(() => onFinish(), 15000); // for test
   }, []);
   const checkCards = () => {
     dispatch(checkMatch());
