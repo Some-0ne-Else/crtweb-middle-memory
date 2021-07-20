@@ -5,6 +5,8 @@ export const ACTIVATE_CARD = 'ACTIVATE_CARD';
 export const RESET_ACTIVE_STATE = 'RESET_ACTIVE_STATE';
 export const INCREASE_COUNTER = 'INCREASE_COUNTER';
 export const TOGGLE_GAME_STATUS = 'TOGGLE_GAME_STATUS';
+export const SET_USERNAME = 'SET_USERNAME';
+export const TOGGLE_SHOW_RESULTS = 'TOGGLE_SHOW_RESULTS';
 
 export const selectCard = ({ id, type }) => ({
   type: SELECT_CARD,
@@ -34,4 +36,13 @@ export const increaseCounter = () => ({
 
 export const toggleGameStatus = () => ({
   type: TOGGLE_GAME_STATUS,
+});
+
+export const setUsername = ({ userName }) => ({
+  type: SET_USERNAME,
+  payload: { userName },
+});
+
+export const toggleShowResults = () => ({
+  type: TOGGLE_SHOW_RESULTS,
 });

@@ -8,6 +8,8 @@ import {
   RESET_ACTIVE_STATE,
   INCREASE_COUNTER,
   TOGGLE_GAME_STATUS,
+  SET_USERNAME,
+  TOGGLE_SHOW_RESULTS,
 } from '../actions';
 
 const initialState = {
@@ -17,6 +19,8 @@ const initialState = {
   },
   selectedCards: [],
   gameStarted: false,
+  userName: 'DefaultUser',
+  showResults: false,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -68,6 +72,12 @@ const rootReducer = (state = initialState, action) => {
     }
     case TOGGLE_GAME_STATUS: {
       return { ...state, gameStarted: !state.gameStarted };
+    }
+    case SET_USERNAME: {
+      return { ...state, userName: action.payload.userName };
+    }
+    case TOGGLE_SHOW_RESULTS: {
+      return { ...state, showResults: true };
     }
     default:
       return { ...state };

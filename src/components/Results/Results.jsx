@@ -6,20 +6,23 @@ import ResultRecord from '../ResultRecord/ResultRecord';
 
 const Results = ({ name, score }) => {
   React.useEffect(() => {
-    console.log(name, score);
-    if (name && score) { results.push({ name, score }); }
-  });
+    results.push({ name, score });
+    console.log(results);
+  }, []);
 
   return (
     <div className="results">
       <h1 className="results__header">Результаты</h1>
-      {results.map((record, idx) => (
-        <ResultRecord
-          key={idx.toString()}
-          name={record.name}
-          score={record.score}
-        />
-      ))}
+      <p className="results__text">Меньше -- Лучше</p>
+      {
+        results.sort((a, b) => a.score - b.score).map((record, idx) => (
+          <ResultRecord
+            key={idx.toString()}
+            name={record.name}
+            score={record.score}
+          />
+        ))
+}
     </div>
   );
 };

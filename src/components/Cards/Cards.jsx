@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Card from '../Card/Card';
-import { REACTION_TIME, COMPARE_WINDOW } from '../../utils/constants';
+import { COMPARE_WINDOW } from '../../utils/constants';
 import {
   selectCard,
   checkMatch,
@@ -24,12 +24,13 @@ const Cards = ({ onFinish }) => {
     if (!cards.length) { onFinish(); }
   }, [cards]);
 
+  React.useEffect(() => {
+    setTimeout(() => onFinish(), 15000); // for test
+  }, []);
   const checkCards = () => {
-    setTimeout(() => {
-      dispatch(checkMatch());
-      dispatch(clearSelection());
-      clearTimeout(timeout.current);
-    }, REACTION_TIME);
+    dispatch(checkMatch());
+    dispatch(clearSelection());
+    clearTimeout(timeout.current);
   };
 
   const onCardClick = (id, type) => {
@@ -44,11 +45,9 @@ const Cards = ({ onFinish }) => {
       dispatch(selectCard({ id, type }));
       dispatch(activateCard({ id }));
       checkCards();
-      setTimeout(() => {
-        dispatch(resetActiveState());
-        dispatch(clearSelection());
-        clearTimeout(timeout.current);
-      }, REACTION_TIME);
+      dispatch(resetActiveState());
+      dispatch(clearSelection());
+      clearTimeout(timeout.current);
     }
   };
   return (

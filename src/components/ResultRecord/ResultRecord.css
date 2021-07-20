@@ -6,6 +6,10 @@
     border-right: solid 1px;
     padding: 5px;
 }
+.record__text{
+    margin:0;
+
+}
 .record:last-child{
     border-bottom: solid 1px;
 }
