@@ -1,36 +1,40 @@
 import './Timer.css';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import { increaseCounter } from '../../services/actions';
 
-const Timer = ({ timerActive, onClick, getTimerValue }) => {
-  const [timerValue, setTimerValue] = React.useState(0);
-  const [buttonDisabled, setButtonDisabled] = React.useState(false);
+const Timer = ({
+  onClick,
+}) => {
+  const { counterValue, gameStarted } = useSelector((state) => ({
+    counterValue: state.counter.value,
+    gameStarted: state.gameStarted,
+  }));
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     let timer;
-    if (timerActive) {
+    if (gameStarted) {
       timer = setTimeout(() => {
-        setTimerValue((c) => c + 1);
+        dispatch(increaseCounter());
       }, 1000);
-    } else { getTimerValue(timerValue); }
+    }
     return () => clearTimeout(timer);
   });
 
   const onStartClick = () => {
-    setButtonDisabled(true);
     onClick();
   };
 
   return (
     <div className="timer">
-      <button type="button" disabled={buttonDisabled} onClick={onStartClick} className="timer__button">Старт</button>
-      <p className="timer__output">{timerValue}</p>
+      <button type="button" disabled={gameStarted} onClick={onStartClick} className="timer__button">Старт</button>
+      <p className="timer__output">{counterValue}</p>
     </div>
   );
 };
 Timer.propTypes = {
-  timerActive: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
-  getTimerValue: PropTypes.func.isRequired,
 };
 export default Timer;

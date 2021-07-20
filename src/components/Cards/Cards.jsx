@@ -1,72 +1,54 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-console */
 import './Cards.css';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Card from '../Card/Card';
-import { reactionTime } from '../../utils/constants';
-import { generateCards, generateTypes } from '../../utils/utils';
+import { REACTION_TIME, COMPARE_WINDOW } from '../../utils/constants';
+import {
+  selectCard,
+  checkMatch,
+  clearSelection,
+  activateCard,
+  resetActiveState,
+} from '../../services/actions';
 
-// eslint-disable-next-line no-unused-vars
 const Cards = ({ onFinish }) => {
-  const [cards, setCards] = React.useState([1]);
-  const selectedCardOne = React.useRef(null);
-  const selectedCardTwo = React.useRef(null);
+  const { cards, selectedCards } = useSelector((store) => ({
+    cards: store.cards,
+    selectedCards: store.selectedCards,
+  }));
+  const dispatch = useDispatch();
   const timeout = React.useRef();
 
   React.useEffect(() => {
-    // Filling initiate cards
-    setCards(generateCards(generateTypes()));
-  }, []);
-
-  React.useEffect(() => {
-    console.log(cards);
     if (!cards.length) { onFinish(); }
   }, [cards]);
 
-  const clearSelection = () => {
-    selectedCardOne.current = null;
-    selectedCardTwo.current = null;
-  };
-  const handleMatch = () => {
+  const checkCards = () => {
     setTimeout(() => {
-      // eslint-disable-next-line max-len
-      setCards(cards.filter((card) => card.id !== selectedCardOne.current.id && card.id !== selectedCardTwo.current.id));
-      clearSelection();
+      dispatch(checkMatch());
+      dispatch(clearSelection());
       clearTimeout(timeout.current);
-    }, reactionTime);
-  };
-
-  const activateState = (selectedCard) => { // rewrite?
-    setCards(cards.map((card) => {
-      if (card.id === selectedCard.id) { card.active = true; return card; }
-      return card;
-    }));
-  };
-
-  const resetState = () => {
-    setCards(cards.map((card) => {
-      if (card.active) { card.active = false; return card; } return card;
-    }));
+    }, REACTION_TIME);
   };
 
   const onCardClick = (id, type) => {
-    if (!selectedCardOne.current) {
-      selectedCardOne.current = { id, type };
-      activateState(selectedCardOne.current);
-      timeout.current = setTimeout(() => { clearSelection(); resetState(); console.log('timeout 5000'); }, 5000);
+    if (selectedCards.length < 1) { // only one card selected
+      dispatch(selectCard({ id, type }));
+      dispatch(activateCard({ id }));
+      timeout.current = setTimeout(() => {
+        dispatch(clearSelection());
+        dispatch(resetActiveState());
+      }, COMPARE_WINDOW);
     } else {
-      selectedCardTwo.current = { id, type };
-      activateState(selectedCardTwo.current);
-    }
-    console.log('1st Card', selectedCardOne.current);
-    console.log('2nd Card', selectedCardTwo.current);
-
-    // eslint-disable-next-line max-len
-    if (selectedCardOne.current?.type === selectedCardTwo.current?.type && selectedCardOne.current?.id !== selectedCardTwo.current?.id) {
-      handleMatch();
-    } else if (selectedCardOne.current && selectedCardTwo.current) {
-      setTimeout(() => { resetState(); clearSelection(); console.log(timeout.current); clearTimeout(timeout.current); console.log(' not match, reset '); }, reactionTime);
+      dispatch(selectCard({ id, type }));
+      dispatch(activateCard({ id }));
+      checkCards();
+      setTimeout(() => {
+        dispatch(resetActiveState());
+        dispatch(clearSelection());
+        clearTimeout(timeout.current);
+      }, REACTION_TIME);
     }
   };
   return (
