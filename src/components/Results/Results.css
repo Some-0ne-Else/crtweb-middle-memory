@@ -1,0 +1,13 @@
+.results{
+    width:1000px;
+}
+
+.results__header{
+    margin: 20px auto;
+    width: 200px;
+}
+
+.results__text{
+    margin: 20px auto;
+    width: 160px;
+}

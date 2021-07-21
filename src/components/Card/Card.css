@@ -1,0 +1,21 @@
+.card{
+
+}
+.card_active{
+    transform:scale(1.1);
+    transition: ease 0.5s;
+}
+.card_button{
+    width: 200px;
+    height: 100px;
+    transition: ease 0.5s;
+    cursor: pointer;
+}
+
+.card__text{
+    opacity:0;
+}
+
+.card__text_active{
+    opacity:1;
+}
