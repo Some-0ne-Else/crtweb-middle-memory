@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Card from '../Card/Card';
-import { COMPARE_WINDOW } from '../../utils/constants';
+import { COMPARE_WINDOW, CLOSE_WINDOW } from '../../utils/constants';
 import {
   selectCard,
   checkMatch,
@@ -21,21 +21,15 @@ const Cards = ({ onFinish }) => {
   const timeout = React.useRef();
 
   React.useEffect(() => {
-    if (true) { console.log('here'); onFinish(); }
-    // if (!cards.length) { onFinish(); }
+    if (!cards.length) { onFinish(); }
   }, [cards]);
 
   React.useEffect(() => {
     // setTimeout(() => onFinish(), 15000); // for test
   }, []);
-  const checkCards = () => {
-    dispatch(checkMatch());
-    dispatch(clearSelection());
-    clearTimeout(timeout.current);
-  };
 
   const onCardClick = (id, type) => {
-    if (selectedCards.length < 1) { // only one card selected
+    if (selectedCards.length === 0) { // only one card selected
       dispatch(selectCard({ id, type }));
       dispatch(activateCard({ id }));
       timeout.current = setTimeout(() => {
@@ -45,10 +39,16 @@ const Cards = ({ onFinish }) => {
     } else {
       dispatch(selectCard({ id, type }));
       dispatch(activateCard({ id }));
-      checkCards();
-      dispatch(resetActiveState());
-      dispatch(clearSelection());
-      clearTimeout(timeout.current);
+      if (selectedCards.length === 2) {
+        dispatch(checkMatch());
+      }
+      setTimeout(
+        () => {
+          dispatch(resetActiveState());
+          dispatch(clearSelection());
+          clearTimeout(timeout.current);
+        }, CLOSE_WINDOW,
+      );
     }
   };
   return (

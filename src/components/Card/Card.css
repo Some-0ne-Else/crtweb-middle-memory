@@ -11,3 +11,11 @@
     transition: ease 0.5s;
     cursor: pointer;
 }
+
+.card__text{
+    opacity:0;
+}
+
+.card__text_active{
+    opacity:1;
+}

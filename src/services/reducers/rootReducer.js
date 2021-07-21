@@ -51,6 +51,7 @@ const rootReducer = (state = initialState, action) => {
     }
 
     case ACTIVATE_CARD: {
+      if (state.cards.filter((el) => el.active === true).length === 2) { return { ...state }; }
       return {
         ...state,
         cards: state.cards.map((card) => {
