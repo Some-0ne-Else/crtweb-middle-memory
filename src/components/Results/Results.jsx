@@ -5,9 +5,7 @@ import results from '../../utils/results.json';
 import ResultRecord from '../ResultRecord/ResultRecord';
 
 const Results = ({ name, score }) => {
-  console.log(localStorage.getItem('game-results'));
-  const render = localStorage.getItem('game-results') ? [...JSON.parse(localStorage.getItem('game-results')), { name, score }] : [...results, { name, score }];
-  console.log(render);
+  const render = React.useMemo(() => (localStorage.getItem('game-results') ? [...JSON.parse(localStorage.getItem('game-results')), { name, score }] : [...results, { name, score }]), [name, score]);
   React.useEffect(() => {
     localStorage.setItem('game-results', JSON.stringify(render));
   }, []);
