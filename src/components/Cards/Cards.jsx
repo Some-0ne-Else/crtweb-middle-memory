@@ -1,5 +1,4 @@
 import './Cards.css';
-import PropTypes from 'prop-types';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Card from '../Card/Card';
@@ -8,11 +7,12 @@ import {
   selectCard,
   checkMatch,
   clearSelection,
-  activateCard,
-  resetActiveState,
+  disableOtherCards,
+  resetCardStatus,
+  nextGameStep,
 } from '../../services/actions';
 
-const Cards = ({ onFinish }) => {
+const Cards = () => {
   const { cards, selectedCards } = useSelector((store) => ({
     cards: store.cards,
     selectedCards: store.selectedCards,
@@ -21,31 +21,24 @@ const Cards = ({ onFinish }) => {
   const timeout = React.useRef();
 
   React.useEffect(() => {
-    if (!cards.length) { onFinish(); }
+    if (cards.filter((el) => el.finded === false).length === 0) { dispatch(nextGameStep()); }
   }, [cards]);
 
-  React.useEffect(() => {
-    // setTimeout(() => onFinish(), 15000); // for test
-  }, []);
-
   const onCardClick = (id, type) => {
-    if (selectedCards.length === 0) { // only one card selected
+    if (selectedCards.length === 0) {
       dispatch(selectCard({ id, type }));
-      dispatch(activateCard({ id }));
       timeout.current = setTimeout(() => {
         dispatch(clearSelection());
-        dispatch(resetActiveState());
+        dispatch(resetCardStatus());
       }, COMPARE_WINDOW);
     } else {
       dispatch(selectCard({ id, type }));
-      dispatch(activateCard({ id }));
-      if (selectedCards.length === 2) {
-        dispatch(checkMatch());
-      }
+      dispatch(disableOtherCards());
       setTimeout(
         () => {
-          dispatch(resetActiveState());
+          dispatch(checkMatch());
           dispatch(clearSelection());
+          dispatch(resetCardStatus());
           clearTimeout(timeout.current);
         }, CLOSE_WINDOW,
       );
@@ -59,6 +52,8 @@ const Cards = ({ onFinish }) => {
           id={card.id}
           type={card.type}
           active={card.active}
+          finded={card.finded}
+          disabled={card.disabled}
           onClick={onCardClick}
         />
       ))}
@@ -66,7 +61,4 @@ const Cards = ({ onFinish }) => {
   );
 };
 
-Cards.propTypes = {
-  onFinish: PropTypes.func.isRequired,
-};
 export default Cards;

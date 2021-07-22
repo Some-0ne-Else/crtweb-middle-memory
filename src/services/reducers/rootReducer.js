@@ -4,12 +4,12 @@ import {
   SELECT_CARD,
   CHECK_MATCH,
   CLEAR_SELECTION,
-  ACTIVATE_CARD,
-  RESET_ACTIVE_STATE,
+  DISABLE_OTHER_CARDS,
+  RESET_CARD_STATUS,
   INCREASE_COUNTER,
-  TOGGLE_GAME_STATUS,
   SET_USERNAME,
-  TOGGLE_SHOW_RESULTS,
+  NEXT_GAME_STEP,
+  PLAY_AGAIN,
 } from '../actions';
 
 const initialState = {
@@ -18,29 +18,38 @@ const initialState = {
     value: 0,
   },
   selectedCards: [],
-  gameStarted: false,
   userName: 'DefaultUser',
-  showResults: false,
+  gameStep: 1,
 };
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
     case SELECT_CARD: {
-      // dont allow select same card twice
+      // dont allow select same card twice and not put more then two cards
       if (state.selectedCards.findIndex((el) => el.id === action.payload.id) === -1) {
         const immutableCards = [...state.selectedCards];
         immutableCards.push(action.payload);
-        return { ...state, selectedCards: immutableCards };
+        return {
+          ...state,
+          cards: state.cards.map((card) => {
+            if (card.id === action.payload.id) { card.active = true; return card; }
+            return card;
+          }),
+          selectedCards: immutableCards,
+        };
       }
       return { ...state };
     }
     case CHECK_MATCH: {
-      if (state.selectedCards[0].type === state.selectedCards[1].type) {
+      if (state.selectedCards.length === 2
+        && state.selectedCards[0].type === state.selectedCards[1].type) {
         return {
           ...state,
-          cards: state.cards.filter(
-            (card) => card.id !== state.selectedCards[0].id
-             && card.id !== state.selectedCards[1].id,
+          cards: state.cards.map(
+            (card) => {
+              if (card.id === state.selectedCards[0].id
+             || card.id === state.selectedCards[1].id) { card.finded = true; } return card;
+            },
           ),
         };
       }
@@ -50,35 +59,44 @@ const rootReducer = (state = initialState, action) => {
       return { ...state, selectedCards: [] };
     }
 
-    case ACTIVATE_CARD: {
-      if (state.cards.filter((el) => el.active === true).length === 2) { return { ...state }; }
+    case DISABLE_OTHER_CARDS: {
       return {
         ...state,
         cards: state.cards.map((card) => {
-          if (card.id === action.payload.id) { card.active = true; return card; }
-          return card;
+          if (!card.active) { card.disabled = true; } return card;
         }),
       };
     }
-    case RESET_ACTIVE_STATE: {
+    case RESET_CARD_STATUS: {
       return {
         ...state,
         cards: state.cards.map((card) => {
-          if (card.active) { card.active = false; return card; } return card;
+          card.active = false; card.disabled = false; return card;
         }),
       };
     }
     case INCREASE_COUNTER: {
       return { ...state, counter: { ...state.counter, value: state.counter.value + 1 } };
     }
-    case TOGGLE_GAME_STATUS: {
-      return { ...state, gameStarted: !state.gameStarted };
-    }
+
     case SET_USERNAME: {
       return { ...state, userName: action.payload.userName };
     }
-    case TOGGLE_SHOW_RESULTS: {
-      return { ...state, showResults: true };
+    case NEXT_GAME_STEP: {
+      if (state.gameStep <= 3) {
+        return {
+          ...state,
+          gameStep: state.gameStep + 1,
+        };
+      }
+      return { ...state };
+    }
+    case PLAY_AGAIN: {
+      return {
+        ...state,
+        counter: { value: 0 },
+        gameStep: 2,
+      };
     }
     default:
       return { ...state };

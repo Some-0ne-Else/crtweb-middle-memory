@@ -3,33 +3,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Card = ({
-  type, id, active, onClick,
-}) => {
-  const [cardActive, setCardActive] = React.useState(false);
-  React.useEffect(() => {
-    setCardActive(active);
-  });
-  const onCardClick = () => {
-    setCardActive(true);
-    onClick(id, type);
-  };
-  return (
-    <div className="card">
-      <button
-        aria-label="card"
-        className={`card_button ${cardActive ? 'card_active' : ''}`}
-        type="button"
-        onClick={onCardClick}
-      >
-        <p className={`card__text ${cardActive ? 'card__text_active' : ''}`}>{type}</p>
-      </button>
-    </div>
-  );
-};
+  type, id, active, finded, disabled, onClick,
+}) => (
+  <div className={`card ${finded ? 'card_finded' : ''} ${active ? 'card_active' : ''}`}>
+    <button
+      disabled={finded || disabled}
+      aria-label="card"
+      className={`card_button  ${(finded || disabled) ? 'card_button_finded' : ''}`}
+      type="button"
+      onClick={() => onClick(id, type)}
+    >
+      <p className={`card__text ${active ? 'card__text_active' : ''}`}>{active ? type : ''}</p>
+    </button>
+  </div>
+);
 Card.propTypes = {
   type: PropTypes.number.isRequired,
   id: PropTypes.number.isRequired,
   active: PropTypes.bool.isRequired,
+  finded: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 export default Card;

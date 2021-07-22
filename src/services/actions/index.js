@@ -1,12 +1,12 @@
 export const SELECT_CARD = 'SELECT_CARD';
 export const CHECK_MATCH = 'CHECK_MATCH';
 export const CLEAR_SELECTION = 'CLEAR_SELECTION';
-export const ACTIVATE_CARD = 'ACTIVATE_CARD';
-export const RESET_ACTIVE_STATE = 'RESET_ACTIVE_STATE';
+export const DISABLE_OTHER_CARDS = 'DISABLE_OTHER_CARDS';
+export const RESET_CARD_STATUS = 'RESET_CARD_STATUS';
 export const INCREASE_COUNTER = 'INCREASE_COUNTER';
-export const TOGGLE_GAME_STATUS = 'TOGGLE_GAME_STATUS';
 export const SET_USERNAME = 'SET_USERNAME';
-export const TOGGLE_SHOW_RESULTS = 'TOGGLE_SHOW_RESULTS';
+export const NEXT_GAME_STEP = 'NEXT_GAME_STEP';
+export const PLAY_AGAIN = 'PLAY_AGAIN';
 
 export const selectCard = ({ id, type }) => ({
   type: SELECT_CARD,
@@ -21,28 +21,25 @@ export const clearSelection = () => ({
   type: CLEAR_SELECTION,
 });
 
-export const activateCard = ({ id }) => ({
-  type: ACTIVATE_CARD,
-  payload: { id },
+export const disableOtherCards = () => ({
+  type: DISABLE_OTHER_CARDS,
 });
-
-export const resetActiveState = () => ({
-  type: RESET_ACTIVE_STATE,
+export const resetCardStatus = () => ({
+  type: RESET_CARD_STATUS,
 });
 
 export const increaseCounter = () => ({
   type: INCREASE_COUNTER,
 });
 
-export const toggleGameStatus = () => ({
-  type: TOGGLE_GAME_STATUS,
-});
-
 export const setUsername = ({ userName }) => ({
   type: SET_USERNAME,
   payload: { userName },
 });
+export const nextGameStep = () => ({
+  type: NEXT_GAME_STEP,
+});
 
-export const toggleShowResults = () => ({
-  type: TOGGLE_SHOW_RESULTS,
+export const playAgain = () => ({
+  type: PLAY_AGAIN,
 });

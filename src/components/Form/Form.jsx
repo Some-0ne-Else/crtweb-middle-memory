@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUsername } from '../../services/actions';
+import { setUsername, nextGameStep } from '../../services/actions';
 import './Form.css';
 
 const Form = () => {
@@ -11,6 +11,7 @@ const Form = () => {
   const onFormSubmit = (e) => {
     e.preventDefault();
     dispatch(setUsername({ userName: userRef.current.value }));
+    dispatch(nextGameStep());
     e.target.closest('form').reset();
   };
 

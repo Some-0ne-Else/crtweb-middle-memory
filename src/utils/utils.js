@@ -18,7 +18,13 @@ const generateTypes = () => {
 const generateCards = (types) => {
   const cardsArr = [];
   for (let i = 0; i < CARDS_AMOUNT; i += 1) {
-    cardsArr.push({ id: i, type: types[i], active: false });
+    cardsArr.push({
+      id: i,
+      type: types[i],
+      active: false,
+      finded: false,
+      disabled: false,
+    });
   }
   return cardsArr;
 };
